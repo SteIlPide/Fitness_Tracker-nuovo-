@@ -1,0 +1,73 @@
+/* src/theme/calendar.css */
+
+/* Stili per le celle del giorno nel calendario */
+/* Targettizza la parte 'day' del componente ion-datetime */
+ion-datetime::part(day) {
+  border-radius: 8px !important; /* Angoli arrotondati come nel wireframe */
+  background: transparent !important; /* Assicurati che lo sfondo di default di Ionic non interferisca */
+  color: var(--ion-color-step-800, #333) !important; /* Colore testo default (nero) */
+  font-weight: bold !important; /* Testo in grassetto */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 35px !important; /* Altezza fissa per le celle */
+  width: 35px !important; /* Larghezza fissa per le celle */
+  margin: 0 auto !important; /* Centra la cella nel suo contenitore */
+}
+
+/* Applica i colori di sfondo ai giorni con i dati */
+ion-datetime::part(day).green-day-bg {
+  background-color: #4caf50 !important; /* Verde */
+  color: white !important; /* Testo bianco */
+}
+
+ion-datetime::part(day).red-day-bg {
+  background-color: #f44336 !important; /* Rosso */
+  color: white !important; /* Testo bianco */
+}
+
+ion-datetime::part(day).orange-day-bg {
+  background-color: #ffc107 !important; /* Arancione */
+  color: white !important; /* Testo bianco */
+}
+
+/* Sovrascrivi lo stile del giorno corrente (se non ha un colore personalizzato) */
+/* Assicurati che il cerchio blu di default di Ionic per il giorno corrente sia visibile */
+ion-datetime::part(day today) {
+  background-color: var(--ion-color-primary, #3880ff) !important; /* Blu di Ionic */
+  color: white !important;
+  border-radius: 50% !important; /* Mantieni il cerchio per il giorno corrente non colorato */
+}
+
+/* Se un giorno colorato è anche il giorno corrente, il colore personalizzato dovrebbe prevalere */
+/* Questo selettore è più specifico per il giorno corrente che ha dati */
+ion-datetime::part(day today).green-day-bg,
+ion-datetime::part(day today).red-day-bg,
+ion-datetime::part(day today).orange-day-bg {
+  /* Assicurati che il colore personalizzato prevalga sul blu di "today" */
+  border-radius: 8px !important; /* Mantieni angoli arrotondati per i giorni colorati */
+  background-color: inherit !important; /* Prende il colore dalla classe specifica */
+  color: inherit !important; /* Prende il colore del testo dalla classe specifica */
+}
+
+/* Stili generali per ion-datetime (possono rimanere globali o essere sovrascritti localmente) */
+ion-datetime {
+  --background: #ffffff;
+  --color: #333;
+  --border-color: transparent; /* Rimuove il bordo interno */
+  padding: 10px;
+}
+/* In un file CSS globale */
+body[data-theme='light'] {
+  /* Stili per il tema chiaro */
+  --ion-background-color: #f8f8f8;
+  --ion-text-color: #333;
+  /* ... altri colori chiari */
+}
+
+body[data-theme='dark'] {
+  /* Stili per il tema scuro */
+  --ion-background-color: #121212;
+  --ion-text-color: #f0f0f0;
+  /* ... altri colori scuri */
+}
