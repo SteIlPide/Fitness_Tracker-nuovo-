@@ -25,11 +25,11 @@ export const useUserStore = defineStore('user', {
       proteins: 0,
       fats: 0,
     },
-    dailyTargetKcal: 2000,
-    dailyTargetCarbs: 250,
-    dailyTargetProteins: 150,
-    dailyTargetFats: 67,
-    waterTargetLiters: 2.5,
+    dailyTargetKcal: 0,
+    dailyTargetCarbs: 0,
+    dailyTargetProteins: 0,
+    dailyTargetFats: 0,
+    waterTargetLiters: 0,
 
     dailyBurnedKcal: 0,
 
@@ -81,6 +81,7 @@ export const useUserStore = defineStore('user', {
     unitSystem: 'metric', // 'metric' o 'imperial'
     appTheme: 'system', // 'light', 'dark', 'system'
   }),
+
   actions: {
     setUserData(data) {
       this.userData = { ...data }
@@ -272,5 +273,9 @@ export const useUserStore = defineStore('user', {
     getDailySummary: (state) => (dateString) => {
       return state.historicalDailyData[dateString]
     },
+  },
+  persist: {
+    key: 'user-store',
+    storage: localStorage,
   },
 })

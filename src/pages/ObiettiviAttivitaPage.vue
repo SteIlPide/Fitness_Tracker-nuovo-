@@ -1,48 +1,56 @@
 <template>
-  <div>
-    <h2>Modifica Obiettivi</h2>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Modifica Obiettivi</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-    <h3>Attività fisica</h3>
-    <div v-for="(attivita, index) in obiettivi.attivitaFisica" :key="index" class="editable-item">
-      <span>{{ attivita.nome }} - {{ attivita.minuti }} minuti</span>
-      <button class="edit-button" @click="modificaElemento('attivitaFisica', index)">✏️</button>
-    </div>
+    <ion-content class="ion-padding">
+      <h3>Attività fisica</h3>
+      <div v-for="(attivita, index) in obiettivi.attivitaFisica" :key="index" class="editable-item">
+        <span>{{ attivita.nome }} - {{ attivita.minuti }} minuti</span>
+        <button class="edit-button" @click="modificaElemento('attivitaFisica', index)">✏️</button>
+      </div>
 
-    <h3>Peso</h3>
-    <div v-for="(peso, index) in obiettivi.peso" :key="index" class="editable-item">
-      <span>{{ peso.data }} - {{ peso.valore }} kg</span>
-      <button class="edit-button" @click="modificaElemento('peso', index)">✏️</button>
-    </div>
+      <h3>Peso</h3>
+      <div v-for="(peso, index) in obiettivi.peso" :key="index" class="editable-item">
+        <span>{{ peso.data }} - {{ peso.valore }} kg</span>
+        <button class="edit-button" @click="modificaElemento('peso', index)">✏️</button>
+      </div>
 
-    <div v-if="showModal" class="modal-backdrop">
-      <div class="modal">
-        <h3>Modifica {{ tipoElemento === 'attivitaFisica' ? 'Attività' : 'Peso' }}</h3>
+      <!-- Modal -->
+      <div v-if="showModal" class="modal-backdrop">
+        <div class="modal">
+          <h3>Modifica {{ tipoElemento === 'attivitaFisica' ? 'Attività' : 'Peso' }}</h3>
 
-        <div v-if="tipoElemento === 'attivitaFisica'">
-          <label>Nome:</label>
-          <input v-model="elementoCorrente.nome" type="text" />
-          <label>Minuti:</label>
-          <input v-model.number="elementoCorrente.minuti" type="number" />
-        </div>
+          <div v-if="tipoElemento === 'attivitaFisica'">
+            <label>Nome:</label>
+            <input v-model="elementoCorrente.nome" type="text" />
+            <label>Minuti:</label>
+            <input v-model.number="elementoCorrente.minuti" type="number" />
+          </div>
 
-        <div v-else-if="tipoElemento === 'peso'">
-          <label>Data:</label>
-          <input v-model="elementoCorrente.data" type="date" />
-          <label>Valore (kg):</label>
-          <input v-model.number="elementoCorrente.valore" type="number" step="0.1" />
-        </div>
+          <div v-else-if="tipoElemento === 'peso'">
+            <label>Data:</label>
+            <input v-model="elementoCorrente.data" type="date" />
+            <label>Valore (kg):</label>
+            <input v-model.number="elementoCorrente.valore" type="number" step="0.1" />
+          </div>
 
-        <div class="modal-buttons">
-          <button @click="salvaModifiche">Salva</button>
-          <button class="cancel" @click="annullaModifica">Annulla</button>
-          <button class="delete" @click="rimuoviElemento">Elimina</button>
+          <div class="modal-buttons">
+            <button @click="salvaModifiche">Salva</button>
+            <button class="cancel" @click="annullaModifica">Annulla</button>
+            <button class="delete" @click="rimuoviElemento">Elimina</button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup>
+import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/vue'
 import { ref, reactive } from 'vue'
 
 const obiettivi = reactive({

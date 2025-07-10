@@ -52,6 +52,7 @@ export const useDishesStore = defineStore('dishes', {
       },
     ],
   }),
+  persist: true, // Persisti lo stato tra le sessioni
   actions: {
     addDish(dish) {
       // Genera un ID semplice per ora, in un'app reale useresti qualcosa di più robusto

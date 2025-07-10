@@ -74,7 +74,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useFoodStore } from '../stores/food'
+
 import { useDishesStore } from '../stores/dishes'
 import {
   IonPage,
@@ -96,8 +96,7 @@ import {
 import { addCircleOutline, removeCircleOutline } from 'ionicons/icons'
 
 const router = useRouter()
-// eslint-disable-next-line no-unused-vars
-const foodStore = useFoodStore()
+
 const dishesStore = useDishesStore()
 
 const props = defineProps({

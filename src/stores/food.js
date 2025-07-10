@@ -86,6 +86,7 @@ export const useFoodStore = defineStore('food', {
     selectedMealType: '',
     selectedFoodForQuantity: null,
   }),
+  persist: true, // Persisti lo stato tra le sessioni
   actions: {
     setSelectedMealType(mealType) {
       this.selectedMealType = mealType

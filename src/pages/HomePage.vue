@@ -39,27 +39,21 @@
               <ion-col>
                 <div class="macro-label">Carboidrati</div>
                 <div class="macro-value">
-                  {{ currentDailyTotals.carbs.toFixed(1) }}/{{
-                    currentDailyTargetKcal ? ((currentDailyTargetKcal * 0.5) / 4).toFixed(0) : 'N/A'
-                  }}
+                  {{ currentDailyTotals.carbs.toFixed(1) }}/{{ userStore.dailyTargetCarbs }}
                   g
                 </div>
               </ion-col>
               <ion-col>
                 <div class="macro-label">Proteine</div>
                 <div class="macro-value">
-                  {{ currentDailyTotals.proteins.toFixed(1) }}/{{
-                    currentDailyTargetKcal ? ((currentDailyTargetKcal * 0.3) / 4).toFixed(0) : 'N/A'
-                  }}
+                  {{ currentDailyTotals.proteins.toFixed(1) }}/{{ userStore.dailyTargetProteins }}
                   g
                 </div>
               </ion-col>
               <ion-col>
                 <div class="macro-label">Grassi</div>
                 <div class="macro-value">
-                  {{ currentDailyTotals.fats.toFixed(1) }}/{{
-                    currentDailyTargetKcal ? ((currentDailyTargetKcal * 0.2) / 9).toFixed(0) : 'N/A'
-                  }}
+                  {{ currentDailyTotals.fats.toFixed(1) }}/{{ userStore.dailyTargetFats }}
                   g
                 </div>
               </ion-col>
@@ -248,7 +242,7 @@
       <ion-card class="water-tracker-card" v-if="isCurrentDay">
         <ion-card-header>
           <ion-card-title>Contatore di acqua</ion-card-title>
-          <ion-card-subtitle>Obiettivo: {{ waterTracker.targetLiters }} L</ion-card-subtitle>
+          <ion-card-subtitle>Obiettivo: {{ userStore.waterTargetLiters }} L</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content class="ion-text-center">
           <div class="water-glasses">

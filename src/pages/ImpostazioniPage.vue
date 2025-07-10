@@ -2,9 +2,11 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
-        </ion-buttons>
+        <template v-slot:start>
+          <ion-buttons>
+            <ion-back-button></ion-back-button>
+          </ion-buttons>
+        </template>
         <ion-title>Impostazioni</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -19,41 +21,46 @@
             <!-- Impostazione: Notifiche -->
             <ion-item @click="debugItemClick('Notifiche')">
               <ion-label>Notifiche</ion-label>
-              <ion-toggle
-                slot="end"
-                :checked="userStore.notificationsEnabled"
-                @ionChange="toggleNotifications($event)"
-                aria-label="Abilita/Disabilita Notifiche"
-              />
+              <template v-slot:end>
+                <ion-toggle
+                  :checked="userStore.notificationsEnabled"
+                  @ionChange="toggleNotifications($event)"
+                  aria-label="Abilita/Disabilita Notifiche"
+                />
+              </template>
             </ion-item>
 
             <!-- Impostazione: Unità di Misura -->
             <ion-item @click="debugItemClick('Unità di Misura')">
               <ion-label>Unità di Misura</ion-label>
-              <ion-select
-                slot="end"
-                :value="userStore.unitSystem"
-                @ionChange="setUnitSystem($event)"
-                aria-label="Seleziona Unità di Misura"
-              >
-                <ion-select-option value="metric">Metrico (kg, cm, L)</ion-select-option>
-                <ion-select-option value="imperial">Imperiale (lbs, pollici, gal)</ion-select-option>
-              </ion-select>
+              <template v-slot:end>
+                <ion-select
+                  :value="userStore.unitSystem"
+                  @ionChange="setUnitSystem($event)"
+                  aria-label="Seleziona Unità di Misura"
+                >
+                  <ion-select-option value="metric">Metrico (kg, cm, L)</ion-select-option>
+                  <ion-select-option value="imperial"
+                    >Imperiale (lbs, pollici, gal)</ion-select-option
+                  >
+                </ion-select>
+              </template>
             </ion-item>
 
             <!-- Impostazione: Tema App -->
             <ion-item @click="debugItemClick('Tema App')">
               <ion-label>Tema App</ion-label>
-              <ion-select
-                slot="end"
-                :value="userStore.appTheme"
-                @ionChange="setAppTheme($event)"
-                aria-label="Seleziona Tema App"
-              >
-                <ion-select-option value="system">Sistema</ion-select-option>
-                <ion-select-option value="light">Chiaro</ion-select-option>
-                <ion-select-option value="dark">Scuro</ion-select-option>
-              </ion-select>
+              <template v-slot:end>
+                <ion-select
+                  :value="userStore.appTheme"
+                  @ionChange="setAppTheme($event)"
+                  aria-label="Seleziona Tema App"
+                >
+                  <ion-select-option value="system">Sistema</ion-select-option>
+                  <ion-select-option value="light">Chiaro</ion-select-option>
+                  <ion-select-option value="dark">Scuro</ion-select-option>
+                </ion-select>
+              </template>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -68,19 +75,27 @@
           <ion-list lines="full">
             <ion-item button detail>
               <ion-label>Obiettivi Nutrizionali e Acqua</ion-label>
-              <ion-text slot="end">N/A kcal, N/A L</ion-text>
+              <template v-slot:end>
+                <ion-text>N/A kcal, N/A L</ion-text>
+              </template>
             </ion-item>
             <ion-item>
               <ion-label>Obiettivo peso</ion-label>
-              <ion-text slot="end">N/A Kg</ion-text>
+              <template v-slot:end>
+                <ion-text>N/A Kg</ion-text>
+              </template>
             </ion-item>
             <ion-item>
               <ion-label>Livello attività</ion-label>
-              <ion-text slot="end">N/A</ion-text>
+              <template v-slot:end>
+                <ion-text>N/A</ion-text>
+              </template>
             </ion-item>
             <ion-item>
               <ion-label>Obiettivo percorso</ion-label>
-              <ion-text slot="end">N/A</ion-text>
+              <template v-slot:end>
+                <ion-text>N/A</ion-text>
+              </template>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -95,7 +110,9 @@
           <ion-list lines="full">
             <ion-item button detail>
               <ion-label>Età, sesso, altezza, peso</ion-label>
-              <ion-text slot="end">N/A anni, N/A, N/A cm, N/A kg</ion-text>
+              <template v-slot:end>
+                <ion-text>N/A anni, N/A, N/A cm, N/A kg</ion-text>
+              </template>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -110,15 +127,21 @@
           <ion-list lines="full">
             <ion-item button detail>
               <ion-label>Tipo di dieta</ion-label>
-              <ion-text slot="end">Nessuna</ion-text>
+              <template v-slot:end>
+                <ion-text>Nessuna</ion-text>
+              </template>
             </ion-item>
             <ion-item button detail>
               <ion-label>Cibi esclusi</ion-label>
-              <ion-text slot="end">Nessuno</ion-text>
+              <template v-slot:end>
+                <ion-text>Nessuno</ion-text>
+              </template>
             </ion-item>
             <ion-item button detail>
               <ion-label>Allergeni</ion-label>
-              <ion-text slot="end">Nessuno</ion-text>
+              <template v-slot:end>
+                <ion-text>Nessuno</ion-text>
+              </template>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -126,7 +149,6 @@
     </ion-content>
   </ion-page>
 </template>
-
 
 <script setup>
 import {

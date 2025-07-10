@@ -159,16 +159,16 @@ function calcolaFabbisognoCalorico(eta, peso, altezza, sesso, attivita, obiettiv
 function calcolaAcquaDaBere(peso) {
   // Calcola l'acqua da bere in litri (circa 30-35 ml per kg di peso)
   let acquaDaBere
-  acquaDaBere = Math.round((peso * 30) / 1000) // Convertito in litri
+  acquaDaBere = Math.round(peso * 30)
   const livelloAttivita = {
-    sedentario: 10,
+    sedentario: 0,
     leggermente_attivo: 200,
     attivo: 500,
     molto_attivo: 800,
   }
   // Aggiunge un extra in base al livello di attività
   acquaDaBere += livelloAttivita[userStore.userData.livelloAttivita] || 0 // Default a sedentario se non specificato
-
+  acquaDaBere = Math.round(acquaDaBere / 1000).toFixed(1) // Converte in litri
   return acquaDaBere // Restituisce l'acqua da bere in litri
 }
 // Funzione per creare il piano e navigare alla schermata principale
@@ -183,24 +183,26 @@ const createPlan = () => {
     userStore.userData.obiettivoPercorso,
   )
   if (userStore.userData.obiettivoPercorso === 'aumentare') {
-    const proteineGiornaliere = Math.round((fabbisogno * 0.3) / 4) // 30% delle calorie da proteine
-    const carboidratiGiornaliere = Math.round((fabbisogno * 0.5) / 4) // 50% delle calorie da carboidrati
-    const grassiGiornaliere = Math.round((fabbisogno * 0.2) / 9) // 20% delle calorie da grassi
+    userStore.dailyTargetProteins = Math.round((fabbisogno * 0.3) / 4) // 30% delle calorie da proteine
+    userStore.dailyTargetCarbs = Math.round((fabbisogno * 0.5) / 4) // 50% delle calorie da carboidrati
+    userStore.dailyTargetFats = Math.round((fabbisogno * 0.2) / 9) // 20% delle calorie da grassi
   } else if (userStore.userData.obiettivoPercorso === 'diminuire') {
-    const proteineGiornaliere = Math.round((fabbisogno * 0.3) / 4) // 30% delle calorie da proteine
-    const carboidratiGiornaliere = Math.round((fabbisogno * 0.4) / 4) // 40% delle calorie da carboidrati
-    const grassiGiornaliere = Math.round((fabbisogno * 0.3) / 9) // 30% delle calorie da grassi
+    userStore.dailyTargetProteins = Math.round((fabbisogno * 0.3) / 4) // 30% delle calorie da proteine
+    userStore.dailyTargetCarbs = Math.round((fabbisogno * 0.4) / 4) // 40% delle calorie da carboidrati
+    userStore.dailyTargetFats = Math.round((fabbisogno * 0.3) / 9) // 30% delle calorie da grassi
   } else {
     //Mantenere il peso
-    const proteineGiornaliere = Math.round((fabbisogno * 0.25) / 4) // 25% delle calorie da proteine
-    const carboidratiGiornaliere = Math.round((fabbisogno * 0.5) / 4) // 50% delle calorie da carboidrati
-    const grassiGiornaliere = Math.round((fabbisogno * 0.25) / 9) // 25% delle calorie da grassi
+    userStore.dailyTargetProteins = Math.round((fabbisogno * 0.25) / 4) // 25% delle calorie da proteine
+    userStore.dailyTargetCarbs = Math.round((fabbisogno * 0.5) / 4) // 50% delle calorie da carboidrati
+    userStore.dailyTargetFats = Math.round((fabbisogno * 0.25) / 9) // 25% delle calorie da grassi
   }
 
   //Calcolo dell'acqua da bere giornaliera
   let acquaDaBere = calcolaAcquaDaBere(userStore.userData.peso)
   // I dati sono già disponibili in userStore.userData
-  console.log('Creazione piano con i dati dallo store:', userStore.userData)
+  userStore.dailyTargetKcal = fabbisogno
+  userStore.waterTargetLiters = acquaDaBere
+
   router.push('/home') // Naviga alla schermata principale dell'app
 }
 </script>
