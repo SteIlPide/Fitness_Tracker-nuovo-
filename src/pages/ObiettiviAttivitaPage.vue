@@ -8,16 +8,32 @@
 
     <ion-content class="ion-padding">
       <h3>Attività fisica</h3>
-      <div v-for="(attivita, index) in obiettivi.attivitaFisica" :key="index" class="editable-item">
+      <!-- Itera sui dati dello store -->
+      <div
+        v-for="attivita in obiettiviStore.attivitaFisica"
+        :key="attivita.id"
+        class="editable-item"
+      >
         <span>{{ attivita.nome }} - {{ attivita.minuti }} minuti</span>
-        <button class="edit-button" @click="modificaElemento('attivitaFisica', index)">✏️</button>
+        <!-- Passa l'ID per la modifica -->
+        <button class="edit-button" @click="modificaElemento('attivitaFisica', attivita.id)">
+          ✏️
+        </button>
       </div>
 
+      <ion-button expand="block" @click="aggiungiElemento('attivitaFisica')">
+        ➕ Aggiungi Attività Fisica
+      </ion-button>
+
       <h3>Peso</h3>
-      <div v-for="(peso, index) in obiettivi.peso" :key="index" class="editable-item">
+      <!-- Itera sui dati dello store -->
+      <div v-for="peso in obiettiviStore.peso" :key="peso.id" class="editable-item">
         <span>{{ peso.data }} - {{ peso.valore }} kg</span>
-        <button class="edit-button" @click="modificaElemento('peso', index)">✏️</button>
+        <!-- Passa l'ID per la modifica -->
+        <button class="edit-button" @click="modificaElemento('peso', peso.id)">✏️</button>
       </div>
+
+      <ion-button expand="block" @click="aggiungiElemento('peso')"> ➕ Aggiungi Peso </ion-button>
 
       <!-- Modal -->
       <div v-if="showModal" class="modal-backdrop">
@@ -50,53 +66,135 @@
 </template>
 
 <script setup>
-import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/vue'
+import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonButton } from '@ionic/vue'
 import { ref, reactive } from 'vue'
+import { useObiettiviStore } from '@/stores/obiettivi' // Importa il nuovo store
+import { v4 as uuidv4 } from 'uuid' // Necessario per generare ID temporanei per i nuovi elementi prima di salvarli
 
-const obiettivi = reactive({
-  attivitaFisica: [
-    { nome: 'Corsa', minuti: 30 },
-    { nome: 'Nuoto', minuti: 45 },
-  ],
-  peso: [
-    { data: '2025-07-01', valore: 70 },
-    { data: '2025-07-08', valore: 69.5 },
-  ],
-})
+const obiettiviStore = useObiettiviStore() // Inizializza lo store
 
 const showModal = ref(false)
 const tipoElemento = ref('')
-const indiceCorrente = ref(-1)
-const elementoCorrente = reactive({})
+const idCorrente = ref(null) // Ora usiamo l'ID invece dell'indice
+const elementoCorrente = reactive({}) // Oggetto reattivo per i dati del form modale
 
-function modificaElemento(tipo, index) {
+function modificaElemento(tipo, id) {
   tipoElemento.value = tipo
-  indiceCorrente.value = index
-  Object.assign(elementoCorrente, JSON.parse(JSON.stringify(obiettivi[tipo][index])))
+  idCorrente.value = id // Salva l'ID dell'elemento che stiamo modificando
+
+  let itemToEdit
+  if (tipo === 'attivitaFisica') {
+    itemToEdit = obiettiviStore.attivitaFisica.find((a) => a.id === id)
+  } else if (tipo === 'peso') {
+    itemToEdit = obiettiviStore.peso.find((p) => p.id === id)
+  }
+
+  if (itemToEdit) {
+    // Copia profonda per evitare modifiche dirette all'array dello store prima del salvataggio
+    Object.assign(elementoCorrente, JSON.parse(JSON.stringify(itemToEdit)))
+    showModal.value = true
+    console.log('DEBUG: Modifica elemento. Elemento corrente:', elementoCorrente)
+  }
+}
+
+function aggiungiElemento(tipo) {
+  tipoElemento.value = tipo
+  idCorrente.value = null // Indica che è un nuovo elemento
+
+  // Inizializza elementoCorrente con un nuovo ID temporaneo
+  if (tipo === 'attivitaFisica') {
+    Object.assign(elementoCorrente, { id: uuidv4(), nome: '', minuti: 0 })
+  } else if (tipo === 'peso') {
+    Object.assign(elementoCorrente, {
+      id: uuidv4(),
+      data: new Date().toISOString().slice(0, 10),
+      valore: 0,
+    })
+  }
+
   showModal.value = true
+  console.log('DEBUG: Aggiungi elemento. Elemento corrente resettato:', elementoCorrente)
 }
 
 function salvaModifiche() {
+  console.log(
+    'DEBUG: Salvataggio modifiche. Tipo:',
+    tipoElemento.value,
+    'ID:',
+    idCorrente.value,
+    'Elemento:',
+    elementoCorrente,
+  )
+
+  // Validazione (puoi sostituire alert con un componente Ionic per una migliore UX)
   if (tipoElemento.value === 'attivitaFisica') {
-    if (!elementoCorrente.nome || elementoCorrente.minuti === undefined) return
+    if (
+      !elementoCorrente.nome ||
+      elementoCorrente.minuti === undefined ||
+      elementoCorrente.minuti < 0
+    ) {
+      alert("Per favore, inserisci un nome e minuti validi per l'attività.")
+      return
+    }
   } else if (tipoElemento.value === 'peso') {
-    if (!elementoCorrente.data || elementoCorrente.valore === undefined) return
+    if (
+      !elementoCorrente.data ||
+      elementoCorrente.valore === undefined ||
+      elementoCorrente.valore <= 0
+    ) {
+      alert('Per favore, inserisci una data e un valore di peso validi.')
+      return
+    }
   }
-  obiettivi[tipoElemento.value][indiceCorrente.value] = JSON.parse(JSON.stringify(elementoCorrente))
+
+  // Crea una copia dell'elemento corrente da passare allo store
+  const elementoDaSalvare = JSON.parse(JSON.stringify(elementoCorrente))
+
+  if (idCorrente.value === null) {
+    // Aggiungi nuovo elemento usando l'azione dello store
+    if (tipoElemento.value === 'attivitaFisica') {
+      obiettiviStore.addAttivita(elementoDaSalvare)
+    } else if (tipoElemento.value === 'peso') {
+      obiettiviStore.addPeso(elementoDaSalvare)
+    }
+    console.log('DEBUG: Nuovo elemento aggiunto tramite store:', elementoDaSalvare)
+  } else {
+    // Modifica esistente usando l'azione dello store
+    if (tipoElemento.value === 'attivitaFisica') {
+      obiettiviStore.updateAttivita(elementoDaSalvare)
+    } else if (tipoElemento.value === 'peso') {
+      obiettiviStore.updatePeso(elementoDaSalvare)
+    }
+    console.log('DEBUG: Elemento esistente modificato tramite store:', elementoDaSalvare)
+  }
+
   showModal.value = false
+  Object.assign(elementoCorrente, {}) // Resetta elementoCorrente dopo il salvataggio
 }
 
 function annullaModifica() {
   showModal.value = false
+  Object.assign(elementoCorrente, {}) // Resetta elementoCorrente all'annullamento
+  console.log('DEBUG: Modifica annullata.')
 }
 
 function rimuoviElemento() {
-  obiettivi[tipoElemento.value].splice(indiceCorrente.value, 1)
+  if (idCorrente.value !== null) {
+    // Rimuovi elemento usando l'azione dello store
+    if (tipoElemento.value === 'attivitaFisica') {
+      obiettiviStore.deleteAttivita(idCorrente.value)
+    } else if (tipoElemento.value === 'peso') {
+      obiettiviStore.deletePeso(idCorrente.value)
+    }
+    console.log('DEBUG: Elemento rimosso tramite store con ID:', idCorrente.value)
+  }
   showModal.value = false
+  Object.assign(elementoCorrente, {}) // Resetta elementoCorrente dopo la rimozione
 }
 </script>
 
 <style scoped>
+/* Stili esistenti (non modificati) */
 .editable-item {
   display: flex;
   align-items: center;

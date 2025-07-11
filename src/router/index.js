@@ -15,7 +15,7 @@ import ImpostazioniPage from '../pages/ImpostazioniPage.vue'
 // NUOVO: Pagina per visualizzare gli ingredienti
 import IngredientsPage from '../pages/IngredientsPage.vue'
 import ObiettiviAttivitaPage from '../pages/ObiettiviAttivitaPage.vue' // Corretto a ../pages/
-
+import ModificaParametroPage from '../pages/ModificaParametroPage.vue'
 const routes = [
   {
     path: '/',
@@ -98,6 +98,16 @@ const routes = [
     path: '/obiettivi-attivita',
     name: 'ObiettiviAttivita',
     component: ObiettiviAttivitaPage,
+  },
+  {
+    path: '/modifica-parametro',
+    name: 'ModificaParametro',
+    component: ModificaParametroPage,
+  },
+  {
+    path: '/modifica-profilo',
+    name: 'ModificaProfilo',
+    component: () => import('../pages/ModificaProfiloPersonalePage.vue'),
   },
 ]
 

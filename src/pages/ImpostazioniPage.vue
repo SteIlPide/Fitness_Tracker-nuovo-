@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <ion-page>
     <ion-header>
@@ -21,46 +22,46 @@
             <!-- Impostazione: Notifiche -->
             <ion-item @click="debugItemClick('Notifiche')">
               <ion-label>Notifiche</ion-label>
-              <template v-slot:end>
-                <ion-toggle
-                  :checked="userStore.notificationsEnabled"
-                  @ionChange="toggleNotifications($event)"
-                  aria-label="Abilita/Disabilita Notifiche"
-                />
-              </template>
+              <!-- eslint-disable-next-line -->
+              <ion-toggle
+                slot="end"
+                :checked="userStore.notificationsEnabled"
+                @ionChange="toggleNotifications($event)"
+                aria-label="Abilita/Disabilita Notifiche"
+              />
             </ion-item>
 
             <!-- Impostazione: Unità di Misura -->
             <ion-item @click="debugItemClick('Unità di Misura')">
               <ion-label>Unità di Misura</ion-label>
-              <template v-slot:end>
-                <ion-select
-                  :value="userStore.unitSystem"
-                  @ionChange="setUnitSystem($event)"
-                  aria-label="Seleziona Unità di Misura"
+              <!-- eslint-disable-next-line -->
+              <ion-select
+                slot="end"
+                :value="userStore.unitSystem"
+                @ionChange="setUnitSystem($event)"
+                aria-label="Seleziona Unità di Misura"
+              >
+                <ion-select-option value="metric">Metrico (kg, cm, L)</ion-select-option>
+                <ion-select-option value="imperial"
+                  >Imperiale (lbs, pollici, gal)</ion-select-option
                 >
-                  <ion-select-option value="metric">Metrico (kg, cm, L)</ion-select-option>
-                  <ion-select-option value="imperial"
-                    >Imperiale (lbs, pollici, gal)</ion-select-option
-                  >
-                </ion-select>
-              </template>
+              </ion-select>
             </ion-item>
 
             <!-- Impostazione: Tema App -->
             <ion-item @click="debugItemClick('Tema App')">
               <ion-label>Tema App</ion-label>
-              <template v-slot:end>
-                <ion-select
-                  :value="userStore.appTheme"
-                  @ionChange="setAppTheme($event)"
-                  aria-label="Seleziona Tema App"
-                >
-                  <ion-select-option value="system">Sistema</ion-select-option>
-                  <ion-select-option value="light">Chiaro</ion-select-option>
-                  <ion-select-option value="dark">Scuro</ion-select-option>
-                </ion-select>
-              </template>
+              <!-- eslint-disable-next-line -->
+              <ion-select
+                slot="end"
+                :value="userStore.appTheme"
+                @ionChange="setAppTheme($event)"
+                aria-label="Seleziona Tema App"
+              >
+                <ion-select-option value="system">Sistema</ion-select-option>
+                <ion-select-option value="light">Chiaro</ion-select-option>
+                <ion-select-option value="dark">Scuro</ion-select-option>
+              </ion-select>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -73,50 +74,66 @@
         </ion-card-header>
         <ion-card-content>
           <ion-list lines="full">
-            <ion-item button detail>
-              <ion-label>Obiettivi Nutrizionali e Acqua</ion-label>
-              <template v-slot:end>
-                <ion-text>N/A kcal, N/A L</ion-text>
-              </template>
+            <ion-item button detail @click="vaiAObiettivi">
+              <ion-label>Obiettivi e misurazioni</ion-label>
+              <!-- eslint-disable-next-line -->
+              <ion-text slot="end">Vai a obiettivi</ion-text>
             </ion-item>
-            <ion-item>
+            <ion-item
+              button
+              @click="
+                $router.push({
+                  path: '/modifica-parametro',
+                  query: { parametro: 'pesoObiettivo', label: 'Obiettivo peso', type: 'number' },
+                })
+              "
+            >
               <ion-label>Obiettivo peso</ion-label>
-              <template v-slot:end>
-                <ion-text>N/A Kg</ion-text>
-              </template>
+              <ion-text slot="end">{{ userStore.userData.pesoObiettivo ?? 'N/A' }} Kg</ion-text>
             </ion-item>
-            <ion-item>
+
+            <ion-item
+              button
+              @click="
+                $router.push({
+                  path: '/modifica-parametro',
+                  query: { parametro: 'livelloAttivita', label: 'Livello attività' },
+                })
+              "
+            >
               <ion-label>Livello attività</ion-label>
-              <template v-slot:end>
-                <ion-text>N/A</ion-text>
-              </template>
+              <ion-text slot="end">{{ userStore.userData.livelloAttivita || 'N/A' }}</ion-text>
             </ion-item>
-            <ion-item>
+
+            <ion-item
+              button
+              @click="
+                $router.push({
+                  path: '/modifica-parametro',
+                  query: { parametro: 'obiettivoPercorso', label: 'Obiettivo percorso' },
+                })
+              "
+            >
               <ion-label>Obiettivo percorso</ion-label>
-              <template v-slot:end>
-                <ion-text>N/A</ion-text>
-              </template>
+              <ion-text slot="end">{{ userStore.userData.obiettivoPercorso || 'N/A' }}</ion-text>
             </ion-item>
           </ion-list>
         </ion-card-content>
       </ion-card>
 
       <!-- Sezione PROFILO PERSONALE -->
-      <ion-card class="settings-card">
-        <ion-card-header>
-          <ion-card-title class="section-title">PROFILO PERSONALE</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list lines="full">
-            <ion-item button detail>
-              <ion-label>Età, sesso, altezza, peso</ion-label>
-              <template v-slot:end>
-                <ion-text>N/A anni, N/A, N/A cm, N/A kg</ion-text>
-              </template>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
+      <ion-item
+        button
+        :router-link="{
+          name: 'ModificaProfilo',
+        }"
+      >
+        <ion-label>Età, sesso, altezza, peso</ion-label>
+        <ion-text slot="end">
+          {{ userStore.userData.eta ?? 'N/A' }} anni, {{ userStore.userData.sesso ?? 'N/A' }},
+          {{ userStore.userData.altezza ?? 'N/A' }} cm, {{ userStore.userData.peso ?? 'N/A' }} kg
+        </ion-text>
+      </ion-item>
 
       <!-- Sezione PREFERENZE ALIMENTARI -->
       <ion-card class="settings-card">
@@ -193,6 +210,14 @@ const setAppTheme = (event) => {
   console.log('DEBUG: Cliccato Tema App. Valore:', event.detail.value)
   userStore.setAppTheme(event.detail.value)
   console.log('DEBUG: Tema App (store):', userStore.appTheme)
+}
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+//Funzioni per obiettivi personalizzati
+function vaiAObiettivi() {
+  router.push('/obiettivi-attivita')
 }
 
 // Nuova funzione di debug per il click sull'item
