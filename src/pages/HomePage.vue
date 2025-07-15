@@ -245,7 +245,7 @@
           <ion-card-subtitle>Obiettivo: {{ userStore.waterTargetLiters }} L</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content class="ion-text-center">
-          <div class="water-glasses">
+          <div class="water-glasses-wrap">
             <div
               v-for="n in waterTracker.targetGlasses"
               :key="n"
@@ -447,7 +447,7 @@ watch(
 )
 
 const waterTracker = ref({
-  targetLiters: 2.5,
+  targetLiters: computed(() => userStore.waterTargetLiters),
   glassSizeMl: 250,
   currentGlasses: 0,
   targetGlasses: computed(() =>
@@ -468,6 +468,7 @@ const addPlate = () => {
 
 const suggestPlate = () => {
   console.log('DEBUG: Consiglia piatto cliccato.')
+  router.push('/select-meal')
 }
 
 const toggleWaterGlass = (glassNumber) => {
@@ -692,6 +693,22 @@ ion-card-title {
 
 .water-glass.filled-glass svg .water-fill-rect {
   fill: #2196f3;
+}
+.water-glasses-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  gap: 12px;
+  padding: 12px;
+}
+
+.water-glass {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .water-note {

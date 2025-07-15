@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <ion-page>
+  <ion-page :key="$route.fullPath">
     <ion-header>
       <ion-toolbar>
         <template v-slot:start>
@@ -79,86 +79,10 @@
               <!-- eslint-disable-next-line -->
               <ion-text slot="end">Vai a obiettivi</ion-text>
             </ion-item>
-            <ion-item
-              button
-              @click="
-                $router.push({
-                  path: '/modifica-parametro',
-                  query: { parametro: 'pesoObiettivo', label: 'Obiettivo peso', type: 'number' },
-                })
-              "
-            >
-              <ion-label>Obiettivo peso</ion-label>
-              <ion-text slot="end">{{ userStore.userData.pesoObiettivo ?? 'N/A' }} Kg</ion-text>
-            </ion-item>
 
-            <ion-item
-              button
-              @click="
-                $router.push({
-                  path: '/modifica-parametro',
-                  query: { parametro: 'livelloAttivita', label: 'Livello attività' },
-                })
-              "
-            >
-              <ion-label>Livello attività</ion-label>
-              <ion-text slot="end">{{ userStore.userData.livelloAttivita || 'N/A' }}</ion-text>
-            </ion-item>
-
-            <ion-item
-              button
-              @click="
-                $router.push({
-                  path: '/modifica-parametro',
-                  query: { parametro: 'obiettivoPercorso', label: 'Obiettivo percorso' },
-                })
-              "
-            >
-              <ion-label>Obiettivo percorso</ion-label>
-              <ion-text slot="end">{{ userStore.userData.obiettivoPercorso || 'N/A' }}</ion-text>
-            </ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-
-      <!-- Sezione PROFILO PERSONALE -->
-      <ion-item
-        button
-        :router-link="{
-          name: 'ModificaProfilo',
-        }"
-      >
-        <ion-label>Età, sesso, altezza, peso</ion-label>
-        <ion-text slot="end">
-          {{ userStore.userData.eta ?? 'N/A' }} anni, {{ userStore.userData.sesso ?? 'N/A' }},
-          {{ userStore.userData.altezza ?? 'N/A' }} cm, {{ userStore.userData.peso ?? 'N/A' }} kg
-        </ion-text>
-      </ion-item>
-
-      <!-- Sezione PREFERENZE ALIMENTARI -->
-      <ion-card class="settings-card">
-        <ion-card-header>
-          <ion-card-title class="section-title">PREFERENZE ALIMENTARI</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list lines="full">
-            <ion-item button detail>
-              <ion-label>Tipo di dieta</ion-label>
-              <template v-slot:end>
-                <ion-text>Nessuna</ion-text>
-              </template>
-            </ion-item>
-            <ion-item button detail>
-              <ion-label>Cibi esclusi</ion-label>
-              <template v-slot:end>
-                <ion-text>Nessuno</ion-text>
-              </template>
-            </ion-item>
-            <ion-item button detail>
-              <ion-label>Allergeni</ion-label>
-              <template v-slot:end>
-                <ion-text>Nessuno</ion-text>
-              </template>
+            <ion-item button detail :router-link="{ path: '/input-dati' }">
+              <ion-label>Modifica dati e preferenze</ion-label>
+              <ion-text slot="end"> Vai → </ion-text>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -212,6 +136,7 @@ const setAppTheme = (event) => {
   console.log('DEBUG: Tema App (store):', userStore.appTheme)
 }
 import { useRouter } from 'vue-router'
+//import ModificaParametroPage from './ModificaParametroPage.vue'
 
 const router = useRouter()
 

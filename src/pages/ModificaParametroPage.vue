@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page :key="$route.fullPath">
     <ion-header>
       <ion-toolbar>
         <template v-slot:start>
@@ -30,7 +30,7 @@
             />
           </ion-item>
 
-          <ion-button expand="block" class="ion-margin-top" @click="salva"> Salva </ion-button>
+          <ion-button expand="block" class="ion-margin-top" @click="salva">Salva</ion-button>
         </ion-card-content>
       </ion-card>
     </ion-content>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
@@ -46,35 +46,43 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 
-const parametro = route.query.parametro
-const label = route.query.label || 'Parametro'
-const inputType = route.query.type || 'text'
+// Computed per leggere sempre i parametri aggiornati dalla query
+const parametro = computed(() => route.query.parametro)
+const label = computed(() => route.query.label || 'Parametro')
+const inputType = computed(() => route.query.type || 'text')
 
 const nuovoValore = ref('')
 const valoreAttuale = ref('')
 const unita = ref('')
 
-onMounted(() => {
-  switch (parametro) {
+// Watch per aggiornare valore attuale ogni volta che cambia parametro
+watch(parametro, aggiornaValoreAttuale, { immediate: true })
+
+function aggiornaValoreAttuale() {
+  console.log('DEBUG parametro:', parametro.value)
+  switch (parametro.value) {
     case 'pesoObiettivo':
       valoreAttuale.value = userStore.userData.pesoObiettivo ?? 'N/A'
       unita.value = 'Kg'
       break
     case 'livelloAttivita':
       valoreAttuale.value = userStore.userData.livelloAttivita ?? 'N/A'
+      unita.value = ''
       break
     case 'obiettivoPercorso':
       valoreAttuale.value = userStore.userData.obiettivoPercorso ?? 'N/A'
+      unita.value = ''
       break
     default:
       valoreAttuale.value = 'N/A'
+      unita.value = ''
   }
-})
+}
 
 function salva() {
   if (nuovoValore.value === '') return
 
-  switch (parametro) {
+  switch (parametro.value) {
     case 'pesoObiettivo':
       userStore.userData.pesoObiettivo = Number(nuovoValore.value)
       break
@@ -86,7 +94,7 @@ function salva() {
       break
   }
 
-  router.push('/impostazioni')
+  router.back()
 }
 </script>
 

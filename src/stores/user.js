@@ -83,6 +83,9 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
+    setUserField(key, value) {
+      this.userData = { ...this.userData, [key]: value }
+    },
     setUserData(data) {
       this.userData = { ...data }
     },

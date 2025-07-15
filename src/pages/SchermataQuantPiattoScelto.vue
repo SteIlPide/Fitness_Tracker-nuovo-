@@ -16,7 +16,7 @@
           <ion-label position="stacked">Quantità (g):</ion-label>
           <ion-input type="number" v-model="quantity" placeholder="Es. 100"></ion-input>
         </ion-item>
-
+        <!--
         <ion-card class="ion-margin-top">
           <ion-card-header>
             <ion-card-title>Ingredienti piatto:</ion-card-title>
@@ -43,13 +43,14 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-button expand="block" class="ion-margin-top" @click="proceedToSummary"
-          >Avanti</ion-button
-        >
+
       </div>
       <div v-else class="ion-text-center">
         <p>Nessun piatto selezionato. Torna indietro per selezionarne uno.</p>
-        <ion-button @click="router.back()">Torna indietro</ion-button>
+        <ion-button @click="router.back()">Torna indietro</ion-button>   -->
+        <ion-button expand="block" class="ion-margin-top" @click="proceedToSummary"
+          >Avanti</ion-button
+        >
       </div>
     </ion-content>
   </ion-page>
@@ -70,14 +71,14 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonCard,
+  /* IonCard,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
   IonList,
   IonButton,
   IonButtons,
-  IonBackButton,
+  IonBackButton,  */
 } from '@ionic/vue'
 
 const router = useRouter()
